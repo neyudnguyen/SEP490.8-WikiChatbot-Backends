@@ -92,7 +92,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Docker")
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
@@ -101,7 +101,12 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
+// Only use HTTPS redirection when not in Docker
+if (app.Environment.EnvironmentName != "Docker")
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();

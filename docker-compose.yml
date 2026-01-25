@@ -1,0 +1,47 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:latest
+    container_name: wikichatbot-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123123
+      POSTGRES_DB: WikiChatbotDb_Dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    networks:
+      - wikichatbot-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # WikiChatbot API
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wikichatbot-api
+    ports:
+      - "5001:80"
+      - "7001:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=WikiChatbotDb_Dev;Username=postgres;Password=123123
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - wikichatbot-network
+    restart: unless-stopped
+
+networks:
+  wikichatbot-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

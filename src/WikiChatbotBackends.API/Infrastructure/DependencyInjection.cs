@@ -24,7 +24,12 @@ public static class DependencyInjection
         var jwtSecret = configuration["Jwt:SecretKey"] ?? "YourSuperSecretKeyThatShouldBeAtLeast32CharactersLong!";
         var jwtIssuer = configuration["Jwt:Issuer"] ?? "WikiChatbotBackends";
         var jwtAudience = configuration["Jwt:Audience"] ?? "WikiChatbotBackends";
-        var jwtExpirationMinutes = int.Parse(configuration["Jwt:ExpirationMinutes"] ?? "60");
+        
+        var jwtExpirationMinutesStr = configuration["Jwt:ExpirationMinutes"] ?? "60";
+        if (!int.TryParse(jwtExpirationMinutesStr, out var jwtExpirationMinutes))
+        {
+            jwtExpirationMinutes = 60;
+        }
 
         services.AddScoped<IJwtService>(sp => new JwtService(jwtSecret, jwtIssuer, jwtAudience, jwtExpirationMinutes));
 
