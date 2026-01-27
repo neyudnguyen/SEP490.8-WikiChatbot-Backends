@@ -1,0 +1,10 @@
+"environmentVariables": {
+  "CONNECTION_STRING_DEFAULT": "Host=localhost;Port=5432;Database=WikiChatbotDb;Username=postgres;Password=123123",
+  "JWT_SECRET_KEY": "YourSuperSecretKeyThatShouldBeAtLeast32CharactersLong!",
+  "LOGGING_DEFAULT_LEVEL": "Information",
+  "LOGGING_ASPNETCORE_LEVEL": "Warning",
+  "ALLOWED_HOSTS": "*",
+  "JWT_ISSUER": "WikiChatbotBackends",
+  "JWT_AUDIENCE": "WikiChatbotBackends",
+  "JWT_EXPIRATION_MINUTES": "60"
+}
