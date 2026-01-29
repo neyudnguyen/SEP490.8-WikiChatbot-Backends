@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using WikiChatbotBackends.API.Infrastructure;
-using WikiChatbotBackends.API.Infrastructure.Data;
+using WikiChatbotBackends.Infrastructure;
+using WikiChatbotBackends.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -92,14 +92,14 @@ builder.Services.AddInfrastructure(builder.Configuration);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Wikipedia Chatbot API v1");
     });
-}
+//}
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");

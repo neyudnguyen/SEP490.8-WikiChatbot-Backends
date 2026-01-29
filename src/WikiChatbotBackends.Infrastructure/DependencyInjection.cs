@@ -1,12 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WikiChatbotBackends.API.Application.Interfaces;
-using WikiChatbotBackends.API.Application.Services;
-using WikiChatbotBackends.API.Infrastructure.Data;
-using WikiChatbotBackends.API.Infrastructure.Repositories;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using WikiChatbotBackends.Application.Interfaces;
+using WikiChatbotBackends.Application.Services;
+using WikiChatbotBackends.Infrastructure.Data;
+using WikiChatbotBackends.Infrastructure.Repositories;
+using WikiChatbotBackends.Infrastructure.Services;
 
-namespace WikiChatbotBackends.API.Infrastructure;
+namespace WikiChatbotBackends.Infrastructure;
 
 public static class DependencyInjection
 {
@@ -29,11 +31,11 @@ public static class DependencyInjection
         services.AddScoped<IJwtService>(sp => new JwtService(jwtSecret, jwtIssuer, jwtAudience, jwtExpirationMinutes));
 
         // Application Services
-        //services.AddScoped<IPeopleService, PeopleService>();
-        //services.AddScoped<IAwardService, AwardService>();
-        //services.AddScoped<ITagService, TagService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IChatHistoryService, ChatHistoryService>();
+
+        // RAG Service with HttpClient
+        services.AddHttpClient<IRagService, RagService>();
 
         return services;
     }

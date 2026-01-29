@@ -1,10 +1,10 @@
 using System.Security.Cryptography;
 using System.Text;
-using WikiChatbotBackends.API.Application.DTOs;
-using WikiChatbotBackends.API.Application.Interfaces;
-using WikiChatbotBackends.API.Domain.Entities;
+using WikiChatbotBackends.Application.DTOs;
+using WikiChatbotBackends.Application.Interfaces;
+using WikiChatbotBackends.Domain.Entities;
 
-namespace WikiChatbotBackends.API.Application.Services;
+namespace WikiChatbotBackends.Application.Services;
 
 public class AuthService : IAuthService
 {
@@ -61,11 +61,11 @@ public class AuthService : IAuthService
 
     public async Task<LoginResponseDto> LoginAsync(LoginDto dto)
     {
-        var users = await _userRepository.FindAsync(u => u.Username == dto.Username);
+        var users = await _userRepository.FindAsync(u => u.Username == dto.UsernameOrEmail || u.Email == dto.UsernameOrEmail);
         var user = users.FirstOrDefault();
         
         if (user == null || !VerifyPassword(dto.Password, user.PasswordHash))
-            throw new UnauthorizedAccessException("Invalid username or password");
+            throw new UnauthorizedAccessException("Invalid username/email or password");
 
         var token = _jwtService.GenerateToken(user.Id, user.Username, user.Role);
 
